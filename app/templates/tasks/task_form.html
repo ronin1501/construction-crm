@@ -1,0 +1,54 @@
+{{ form.hidden_tag() }}
+
+<div class="mb-3">
+    {{ form.title.label }}
+    {{ form.title(class="form-control") }}
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        {{ form.task_type.label }}
+        {{ form.task_type(class="form-select") }}
+    </div>
+    <div class="col-md-4 mb-3">
+        {{ form.priority.label }}
+        {{ form.priority(class="form-select") }}
+    </div>
+    <div class="col-md-4 mb-3">
+        {{ form.status.label }}
+        {{ form.status(class="form-select") }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        {{ form.due_date.label }}
+        {{ form.due_date(class="form-control") }}
+    </div>
+    <div class="col-md-6 mb-3">
+        {{ form.responsible_person.label }}
+        {{ form.responsible_person(class="form-control") }}
+    </div>
+</div>
+
+<div class="mb-3">
+    {{ form.description.label }}
+    {{ form.description(class="form-control", rows="4") }}
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        {{ form.client_id.label }}
+        {{ form.client_id(class="form-select") }}
+    </div>
+    <div class="col-md-4 mb-3">
+        {{ form.contract_id.label }}
+        {{ form.contract_id(class="form-select") }}
+    </div>
+    <div class="col-md-4 mb-3">
+        {{ form.lead_id.label }}
+        {{ form.lead_id(class="form-select") }}
+    </div>
+</div>
+
+{{ form.submit(class="btn btn-success") }}

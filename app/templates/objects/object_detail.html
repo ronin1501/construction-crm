@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">{{ obj.name }}</h2>
+
+<div class="card p-4">
+    <p><b>Адрес:</b> {{ obj.address }}</p>
+    <p><b>Вид работ:</b> {{ obj.work_type }}</p>
+    <p><b>Статус:</b> {{ obj.status }}</p>
+    <p><b>Дата начала:</b> {{ obj.start_date }}</p>
+    <p><b>Дата окончания:</b> {{ obj.end_date }}</p>
+</div>
+
+<a href="{{ url_for('main.object_edit', id=obj.id) }}" class="btn btn-warning mt-3">Редактировать</a>
+{% endblock %}

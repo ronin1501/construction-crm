@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Строительные объекты</h2>
+
+<a href="{{ url_for('main.object_add') }}" class="btn btn-primary mb-3">Добавить объект</a>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Адрес</th>
+        <th>Вид работ</th>
+        <th>Статус</th>
+        <th></th>
+    </tr>
+
+    {% for obj in objects %}
+    <tr>
+        <td>{{ obj.id }}</td>
+        <td>{{ obj.name }}</td>
+        <td>{{ obj.address }}</td>
+        <td>{{ obj.work_type }}</td>
+        <td>{{ obj.status }}</td>
+        <td>
+            <a href="{{ url_for('main.object_detail', id=obj.id) }}" class="btn btn-sm btn-outline-primary">Открыть</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

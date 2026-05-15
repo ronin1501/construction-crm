@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Акты выполненных работ</h2>
+
+<form method="get" class="card p-4 mb-4">
+    <div class="row">
+        <div class="col-md-8 mb-3">
+            <label>Поиск</label>
+            <input type="text" name="search" value="{{ search }}" class="form-control"
+                   placeholder="Номер акта, договор, вид работ">
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label>Статус</label>
+            <select name="status" class="form-select">
+                <option value="">Все статусы</option>
+                {% for item in ["Подготовлен", "На подписании", "Подписан", "Отклонен"] %}
+                    <option value="{{ item }}" {% if status == item %}selected{% endif %}>{{ item }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-1 mb-3 d-flex align-items-end">
+            <button class="btn btn-primary w-100">Найти</button>
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Тип</th>
+        <th>Номер</th>
+        <th>Дата</th>
+        <th>Договор</th>
+        <th>Работы</th>
+        <th>Сумма</th>
+        <th>Статус</th>
+        <th></th>
+    </tr>
+
+    {% for act in acts %}
+    <tr>
+        <td>{{ act.id }}</td>
+        <td>{{ act.act_type }}</td>
+        <td>{{ act.act_number }}</td>
+        <td>{{ act.act_date or "—" }}</td>
+        <td>
+            {% if act.contract %}
+                <a href="{{ url_for('main.contract_detail', id=act.contract.id) }}">
+                    {{ act.contract.number }}
+                </a>
+            {% else %}
+                —
+            {% endif %}
+        </td>
+        <td>{{ act.work_name or "—" }}</td>
+        <td>{{ act.total_amount or "—" }} ₽</td>
+        <td><span class="status-pill">{{ act.acceptance_status }}</span></td>
+        <td>
+            <a href="{{ url_for('main.act_export_docx', id=act.id) }}"
+               class="btn btn-sm btn-outline-primary">
+                DOCX
+            </a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="9">Акты пока не добавлены.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

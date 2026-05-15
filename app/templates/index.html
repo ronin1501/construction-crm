@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="home-hero">
+    <div class="home-hero-content">
+        <div class="home-badge">
+            АИС учета клиентов строительной компании
+        </div>
+
+        <h1>
+            Единая система для учета клиентов, договоров, объектов и строительной документации
+        </h1>
+
+        <p class="home-hero-text">
+            Автоматизированная информационная система предназначена для ООО «Дорожник»
+            и используется для централизованного хранения сведений о клиентах,
+            строительных объектах, договорах, сроках выполнения работ, заявках,
+            задачах, оплатах, актах сдачи-приемки и прикрепленных документах.
+        </p>
+
+        <div class="home-actions">
+            <a href="{{ url_for('main.leads_list') }}" class="btn btn-primary">
+                Открыть заявки
+            </a>
+
+            <a href="{{ url_for('main.contracts_list') }}" class="btn btn-outline-primary">
+                Открыть договоры
+            </a>
+        </div>
+    </div>
+
+    <div class="home-hero-panel">
+        <h3>Оперативная сводка</h3>
+
+        <div class="manager-metrics">
+            <div>
+                <span>Новые заявки</span>
+                <strong>{{ metrics.new_leads_count }}</strong>
+            </div>
+            <div>
+                <span>Задачи сегодня</span>
+                <strong>{{ metrics.tasks_today_count }}</strong>
+            </div>
+            <div>
+                <span>Просроченные задачи</span>
+                <strong>{{ metrics.overdue_tasks_count }}</strong>
+            </div>
+            <div>
+                <span>Ожидаемые оплаты</span>
+                <strong>{{ metrics.expected_payments_total }} ₽</strong>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="home-section">
+    <div class="home-section-heading">
+        <span>Функциональные возможности</span>
+        <h2>Система объединяет основные процессы строительной организации</h2>
+        <p>
+            Вместо разрозненных файлов, таблиц и бумажных документов данные собираются
+            в единой базе PostgreSQL и доступны через веб-интерфейс.
+        </p>
+    </div>
+
+    <div class="home-feature-grid">
+        <div class="home-feature">
+            <h4>Заявки и обращения</h4>
+            <p>
+                Первичные обращения клиентов фиксируются в системе: источник, вид работ,
+                объект, статус обработки, ответственный сотрудник и комментарий.
+            </p>
+            <a href="{{ url_for('main.leads_list') }}">Открыть заявки →</a>
+        </div>
+
+        <div class="home-feature">
+            <h4>Учет клиентов</h4>
+            <p>
+                В системе хранятся сведения о физических лицах, юридических лицах,
+                муниципальных заказчиках, индивидуальных предпринимателях и поставщиках.
+            </p>
+            <a href="{{ url_for('main.clients_list') }}">Открыть клиентов →</a>
+        </div>
+
+        <div class="home-feature">
+            <h4>Договорная работа</h4>
+            <p>
+                Для каждого договора фиксируются номер, дата, сумма, статус,
+                объект строительства, сроки, условия выполнения работ и порядок приемки.
+            </p>
+            <a href="{{ url_for('main.contracts_list') }}">Открыть договоры →</a>
+        </div>
+
+        <div class="home-feature">
+            <h4>Задачи и напоминания</h4>
+            <p>
+                Сотрудники могут контролировать звонки, подготовку документов,
+                проверку оплат, сроки выполнения работ и подписание актов.
+            </p>
+            <a href="{{ url_for('main.tasks_list') }}">Открыть задачи →</a>
+        </div>
+
+        <div class="home-feature">
+            <h4>Оплаты</h4>
+            <p>
+                Раздел оплат помогает отслеживать авансы, окончательные расчеты,
+                ожидаемые платежи и фактическое поступление денежных средств.
+            </p>
+            <a href="{{ url_for('main.payments_list') }}">Открыть оплаты →</a>
+        </div>
+
+        <div class="home-feature">
+            <h4>Журнал действий</h4>
+            <p>
+                Система фиксирует ключевые события: создание клиентов, заявок,
+                договоров, загрузку документов, изменение задач и актов.
+            </p>
+            <a href="{{ url_for('main.activity_list') }}">Открыть журнал →</a>
+        </div>
+    </div>
+</section>
+
+
+<section class="home-process">
+    <div class="home-section-heading">
+        <span>Логика работы</span>
+        <h2>От обращения клиента до закрытия договора</h2>
+    </div>
+
+    <div class="home-process-line">
+        <div class="home-process-step">
+            <div class="step-number">01</div>
+            <h4>Заявка</h4>
+            <p>Фиксируется обращение клиента, источник, вид работ, контактные данные и статус обработки.</p>
+        </div>
+
+        <div class="home-process-step">
+            <div class="step-number">02</div>
+            <h4>Клиент</h4>
+            <p>Создается карточка заказчика или поставщика: контакты, адрес, представитель, ИНН и метки.</p>
+        </div>
+
+        <div class="home-process-step">
+            <div class="step-number">03</div>
+            <h4>Договор</h4>
+            <p>Формируется карточка договора: сумма, НДС, сроки, место приемки, санкции и порядок сдачи работ.</p>
+        </div>
+
+        <div class="home-process-step">
+            <div class="step-number">04</div>
+            <h4>Исполнение</h4>
+            <p>Сотрудники ведут задачи, контролируют сроки, документы, акты КС-2/КС-3 и оплаты.</p>
+        </div>
+
+        <div class="home-process-step">
+            <div class="step-number">05</div>
+            <h4>Закрытие</h4>
+            <p>Фиксируются акты сдачи-приемки, статус выполнения работ и сведения об оплате.</p>
+        </div>
+    </div>
+</section>
+
+
+<section class="home-final">
+    <div>
+        <span>Дашборд руководителя</span>
+        <h2>Контроль договоров, заявок, задач и оплат в одном интерфейсе</h2>
+        <p>
+            Система показывает активные договоры, новые заявки, просроченные задачи,
+            акты на подписании, ожидаемые платежи и договоры с приближающимся сроком завершения.
+        </p>
+    </div>
+
+    <a href="{{ url_for('main.reports') }}" class="btn btn-primary">
+        Открыть отчеты
+    </a>
+</section>
+
+{% if recent_leads or upcoming_tasks %}
+<section class="home-section">
+    <div class="home-section-heading">
+        <span>Оперативная работа</span>
+        <h2>Последние заявки и ближайшие задачи</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card p-4">
+                <h4>Последние заявки</h4>
+                {% for lead in recent_leads %}
+                    <div class="mini-row">
+                        <div>
+                            <b>#{{ lead.id }} {{ lead.contact_person }}</b>
+                            <p>{{ lead.work_type or "Вид работ не указан" }}</p>
+                        </div>
+                        <span class="status-pill">{{ lead.status }}</span>
+                    </div>
+                {% else %}
+                    <p>Заявки пока не добавлены.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card p-4">
+                <h4>Ближайшие задачи</h4>
+                {% for task in upcoming_tasks %}
+                    <div class="mini-row">
+                        <div>
+                            <b>{{ task.title }}</b>
+                            <p>Срок: {{ task.due_date or "не указан" }}</p>
+                        </div>
+                        <span class="status-pill">{{ task.status }}</span>
+                    </div>
+                {% else %}
+                    <p>Задачи пока не добавлены.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

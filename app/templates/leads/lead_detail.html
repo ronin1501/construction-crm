@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">{{ lead.title }}</h2>
+
+<div class="mb-4">
+    <a href="{{ url_for('main.lead_edit', id=lead.id) }}" class="btn btn-warning">
+        Редактировать
+    </a>
+
+    <form method="post" action="{{ url_for('main.lead_create_task', id=lead.id) }}" style="display: inline-block;">
+        <button type="submit" class="btn btn-primary">
+            Создать задачу
+        </button>
+    </form>
+
+    <form method="post" action="{{ url_for('main.lead_delete', id=lead.id) }}" style="display: inline-block;"
+        onsubmit="return confirm('Удалить заявку?');">
+        <button type="submit" class="btn btn-outline-primary">
+            Удалить
+        </button>
+    </form>
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Основные сведения</h4>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p><b>Дата обращения:</b> {{ lead.lead_date }}</p>
+            <p><b>Источник:</b> {{ lead.source }}</p>
+            <p><b>Статус:</b> {{ lead.status }}</p>
+            <p><b>Приоритет:</b> {{ lead.priority }}</p>
+            <p><b>Ответственный:</b> {{ lead.responsible or "—" }}</p>
+        </div>
+
+        <div class="col-md-6">
+            <p><b>Связанный клиент:</b>
+                {% if lead.client %}
+                    <a href="{{ url_for('main.client_detail', id=lead.client.id) }}">
+                        {{ lead.client.name }}
+                    </a>
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+
+            <p><b>Связанный объект:</b>
+                {% if lead.object %}
+                    <a href="{{ url_for('main.object_detail', id=lead.object.id) }}">
+                        {{ lead.object.name }}
+                    </a>
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+
+            <p><b>Предварительный бюджет:</b> {{ lead.estimated_budget or "—" }} ₽</p>
+        </div>
+    </div>
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Контактные данные</h4>
+
+    <p><b>Контактное лицо:</b> {{ lead.contact_person or "—" }}</p>
+    <p><b>Телефон:</b> {{ lead.phone or "—" }}</p>
+    <p><b>Email:</b> {{ lead.email or "—" }}</p>
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Информация по работам</h4>
+
+    <p><b>Вид работ:</b> {{ lead.work_type or "—" }}</p>
+    <p><b>Адрес объекта / место работ:</b> {{ lead.object_address or "—" }}</p>
+
+    <p><b>Комментарий:</b></p>
+    <p>{{ lead.comment or "—" }}</p>
+</div>
+
+{% if lead.tasks %}
+<div class="card p-4">
+    <h4>Задачи по заявке</h4>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Задача</th>
+            <th>Срок</th>
+            <th>Статус</th>
+            <th>Приоритет</th>
+        </tr>
+
+        {% for task in lead.tasks %}
+        <tr>
+            <td>{{ task.id }}</td>
+            <td>{{ task.title }}</td>
+            <td>{{ task.due_date or "—" }}</td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.priority }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+{% endblock %}

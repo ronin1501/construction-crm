@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Редактировать задачу #{{ task.id }}</h2>
+
+<form method="post" class="card p-4">
+    {% include "tasks/task_form.html" %}
+</form>
+{% endblock %}

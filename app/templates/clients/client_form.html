@@ -1,0 +1,11 @@
+{{ form.hidden_tag() }}
+
+<div class="mb-3">{{ form.client_type.label }} {{ form.client_type(class="form-select") }}</div>
+<div class="mb-3">{{ form.name.label }} {{ form.name(class="form-control") }}</div>
+<div class="mb-3">{{ form.inn.label }} {{ form.inn(class="form-control") }}</div>
+<div class="mb-3">{{ form.phone.label }} {{ form.phone(class="form-control") }}</div>
+<div class="mb-3">{{ form.email.label }} {{ form.email(class="form-control") }}</div>
+<div class="mb-3">{{ form.address.label }} {{ form.address(class="form-control") }}</div>
+<div class="mb-3">{{ form.representative.label }} {{ form.representative(class="form-control") }}</div>
+
+{{ form.submit(class="btn btn-success") }}

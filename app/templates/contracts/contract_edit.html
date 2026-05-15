@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Редактировать договор</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% include "contracts/contract_form.html" %}
+</form>
+{% endblock %}

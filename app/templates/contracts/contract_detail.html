@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">{{ contract.title }}</h2>
+
+<div class="mb-4">
+    <a href="{{ url_for('main.contract_export_docx', id=contract.id) }}" class="btn btn-primary">
+        Выгрузить договор DOCX
+    </a>
+
+    <a href="{{ url_for('main.contract_edit', id=contract.id) }}" class="btn btn-warning">
+        Редактировать договор
+    </a>
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Основные сведения</h4>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p><b>Номер договора:</b> {{ contract.number }}</p>
+            <p><b>Тип договора:</b> {{ contract.contract_type }}</p>
+            <p><b>Дата договора:</b> {{ contract.contract_date }}</p>
+            <p><b>Статус:</b> {{ contract.status }}</p>
+            <p><b>Сумма:</b> {{ contract.amount }} ₽</p>
+            <p><b>НДС:</b> {{ contract.vat_rate or "—" }}</p>
+        </div>
+
+        <div class="col-md-6">
+            <p><b>Клиент / заказчик:</b> {{ contract.client.name }}</p>
+            <p><b>Подрядчик:</b> {{ contract.contractor_name or "—" }}</p>
+            <p><b>Поставщик:</b> {{ contract.supplier_name or "—" }}</p>
+            <p><b>Объект:</b> {{ contract.object.name if contract.object else "Не указан" }}</p>
+            <p><b>Место приемки:</b> {{ contract.acceptance_place or "—" }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Сроки и сдача-приемка</h4>
+
+    <p><b>Дата начала:</b> {{ contract.start_date or "—" }}</p>
+    <p><b>Дата окончания:</b> {{ contract.end_date or "—" }}</p>
+    <p><b>Гарантийный срок:</b> {{ contract.warranty_months or "—" }} мес.</p>
+
+    <p><b>Условия поставки / выполнения работ:</b></p>
+    <p>{{ contract.delivery_terms or "—" }}</p>
+
+    <p><b>Порядок сдачи-приемки:</b></p>
+    <p>{{ contract.acceptance_procedure or "—" }}</p>
+
+    <p><b>Санкции / неустойка:</b></p>
+    <p>{{ contract.penalty_terms or "—" }}</p>
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Загрузка документа</h4>
+
+    <form method="post" enctype="multipart/form-data"
+          action="{{ url_for('main.document_add', id=contract.id) }}">
+        {{ upload_form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ upload_form.document_type.label }}
+            {{ upload_form.document_type(class="form-select") }}
+        </div>
+
+        <div class="mb-3">
+            {{ upload_form.file.label }}
+            {{ upload_form.file(class="form-control") }}
+        </div>
+
+        {{ upload_form.submit(class="btn btn-success") }}
+    </form>
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Документы по договору</h4>
+
+    {% for doc in contract.documents %}
+        <div class="border rounded p-3 mb-3">
+            <p><b>Тип документа:</b> {{ doc.document_type }}</p>
+            <p><b>Файл:</b> {{ doc.original_filename or doc.filename }}</p>
+            <p><b>Расширение:</b> {{ doc.file_extension or "—" }}</p>
+            <p><b>Размер:</b> {{ doc.file_size or "—" }} байт</p>
+
+            <a href="{{ url_for('main.document_download', id=doc.id) }}"
+               class="btn btn-sm btn-outline-primary">
+                Скачать документ
+            </a>
+
+            {% if doc.extracted_text %}
+                <div class="mt-3">
+                    <h6>Извлеченный текст:</h6>
+                    <pre class="bg-light p-3 rounded" style="white-space: pre-wrap; max-height: 250px; overflow-y: auto;">{{ doc.extracted_text[:2000] }}</pre>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Документы по договору еще не загружены.</p>
+    {% endfor %}
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Добавить акт выполненных работ / сдачи-приемки</h4>
+
+    <form method="post" action="{{ url_for('main.act_add', id=contract.id) }}">
+        {{ act_form.hidden_tag() }}
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                {{ act_form.act_number.label }}
+                {{ act_form.act_number(class="form-control") }}
+            </div>
+
+            <div class="col-md-4 mb-3">
+                {{ act_form.act_date.label }}
+                {{ act_form.act_date(class="form-control") }}
+            </div>
+
+            <div class="col-md-4 mb-3">
+                {{ act_form.act_type.label }}
+                {{ act_form.act_type(class="form-select") }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ act_form.work_name.label }}
+            {{ act_form.work_name(class="form-control") }}
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                {{ act_form.amount.label }}
+                {{ act_form.amount(class="form-control") }}
+            </div>
+
+            <div class="col-md-4 mb-3">
+                {{ act_form.vat_amount.label }}
+                {{ act_form.vat_amount(class="form-control") }}
+            </div>
+
+            <div class="col-md-4 mb-3">
+                {{ act_form.total_amount.label }}
+                {{ act_form.total_amount(class="form-control") }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ act_form.acceptance_place.label }}
+                {{ act_form.acceptance_place(class="form-control") }}
+            </div>
+
+            <div class="col-md-6 mb-3">
+                {{ act_form.acceptance_status.label }}
+                {{ act_form.acceptance_status(class="form-select") }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ act_form.signed_by_customer.label }}
+                {{ act_form.signed_by_customer(class="form-control") }}
+            </div>
+
+            <div class="col-md-6 mb-3">
+                {{ act_form.signed_by_contractor.label }}
+                {{ act_form.signed_by_contractor(class="form-control") }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ act_form.comment.label }}
+            {{ act_form.comment(class="form-control", rows="3") }}
+        </div>
+
+        {{ act_form.submit(class="btn btn-success") }}
+    </form>
+</div>
+
+<div class="card p-4">
+    <h4>Акты по договору</h4>
+
+    {% for act in contract.acts %}
+        <div class="border rounded p-3 mb-3">
+            <p><b>{{ act.act_type }} № {{ act.act_number }}</b> от {{ act.act_date }}</p>
+            <p><b>Работы:</b> {{ act.work_name or "—" }}</p>
+            <p><b>Итого:</b> {{ act.total_amount or "—" }} ₽</p>
+            <p><b>Статус приемки:</b> {{ act.acceptance_status }}</p>
+
+            <a href="{{ url_for('main.act_export_docx', id=act.id) }}"
+            class="btn btn-sm btn-outline-primary">
+                Выгрузить акт DOCX
+            </a>
+        </div>
+    {% else %}
+        <p>Акты по договору еще не добавлены.</p>
+    {% endfor %}
+</div>
+{% endblock %}

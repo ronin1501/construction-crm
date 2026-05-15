@@ -1,0 +1,88 @@
+{{ form.hidden_tag() }}
+
+<div class="row">
+    <div class="col-md-8 mb-3">
+        {{ form.title.label }}
+        {{ form.title(class="form-control", placeholder="Например: Расчет стоимости благоустройства территории") }}
+    </div>
+
+    <div class="col-md-4 mb-3">
+        {{ form.lead_date.label }}
+        {{ form.lead_date(class="form-control") }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        {{ form.source.label }}
+        {{ form.source(class="form-select") }}
+    </div>
+
+    <div class="col-md-4 mb-3">
+        {{ form.status.label }}
+        {{ form.status(class="form-select") }}
+    </div>
+
+    <div class="col-md-4 mb-3">
+        {{ form.priority.label }}
+        {{ form.priority(class="form-select") }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        {{ form.client_id.label }}
+        {{ form.client_id(class="form-select") }}
+    </div>
+
+    <div class="col-md-6 mb-3">
+        {{ form.object_id.label }}
+        {{ form.object_id(class="form-select") }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        {{ form.contact_person.label }}
+        {{ form.contact_person(class="form-control") }}
+    </div>
+
+    <div class="col-md-4 mb-3">
+        {{ form.phone.label }}
+        {{ form.phone(class="form-control") }}
+    </div>
+
+    <div class="col-md-4 mb-3">
+        {{ form.email.label }}
+        {{ form.email(class="form-control") }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-5 mb-3">
+        {{ form.work_type.label }}
+        {{ form.work_type(class="form-control", placeholder="Например: благоустройство, ремонт, асфальтирование") }}
+    </div>
+
+    <div class="col-md-5 mb-3">
+        {{ form.object_address.label }}
+        {{ form.object_address(class="form-control") }}
+    </div>
+
+    <div class="col-md-2 mb-3">
+        {{ form.estimated_budget.label }}
+        {{ form.estimated_budget(class="form-control") }}
+    </div>
+</div>
+
+<div class="mb-3">
+    {{ form.responsible.label }}
+    {{ form.responsible(class="form-control", placeholder="Например: Менеджер") }}
+</div>
+
+<div class="mb-3">
+    {{ form.comment.label }}
+    {{ form.comment(class="form-control", rows="4") }}
+</div>
+
+{{ form.submit(class="btn btn-success") }}

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Заявки / обращения клиентов</h2>
+
+<form method="get" class="card p-4 mb-4 filter-card">
+    <div class="row g-3 align-items-end">
+        <div class="col-lg-4 col-md-12">
+            <label>Поиск</label>
+            <input type="text" name="search" value="{{ search }}" class="form-control"
+                  placeholder="Клиент, телефон, вид работ, адрес">
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+            <label>Статус</label>
+            <select name="status" class="form-select">
+                <option value="">Все</option>
+                {% for item in ["Новая", "В обработке", "Расчет сметы", "Коммерческое предложение", "Договор", "Отказ", "Закрыта"] %}
+                    <option value="{{ item }}" {% if status == item %}selected{% endif %}>{{ item }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+            <label>Источник</label>
+            <select name="source" class="form-select">
+                <option value="">Все</option>
+                {% for item in ["Сайт", "Телефон", "Email", "Личное обращение", "Рекомендация", "Муниципальный заказ", "Повторное обращение", "Иное"] %}
+                    <option value="{{ item }}" {% if source == item %}selected{% endif %}>{{ item }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+            <label>Приоритет</label>
+            <select name="priority" class="form-select">
+                <option value="">Все</option>
+                {% for item in ["Низкая", "Обычная", "Высокая", "Срочная"] %}
+                    <option value="{{ item }}" {% if priority == item %}selected{% endif %}>{{ item }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+            <button class="btn btn-primary filter-btn" type="submit">
+                Найти
+            </button>
+        </div>
+    </div>
+</form>
+
+<div class="mb-4">
+    <a href="{{ url_for('main.lead_add') }}" class="btn btn-primary">
+        Добавить заявку
+    </a>
+</div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Дата</th>
+        <th>Тема</th>
+        <th>Клиент</th>
+        <th>Контакт</th>
+        <th>Вид работ</th>
+        <th>Статус</th>
+        <th>Приоритет</th>
+        <th></th>
+    </tr>
+
+    {% for lead in leads %}
+    <tr>
+        <td>{{ lead.id }}</td>
+        <td>{{ lead.lead_date }}</td>
+        <td>{{ lead.title }}</td>
+        <td>{{ lead.client.name if lead.client else "—" }}</td>
+        <td>
+            {{ lead.contact_person or "—" }}<br>
+            <span class="text-muted">{{ lead.phone or "" }}</span>
+        </td>
+        <td>{{ lead.work_type or "—" }}</td>
+        <td>
+            <span class="crm-status crm-status-{{ lead.status|lower|replace(' ', '-') }}">
+                {{ lead.status }}
+            </span>
+        </td>
+        <td>{{ lead.priority }}</td>
+        <td>
+            <a href="{{ url_for('main.lead_detail', id=lead.id) }}"
+              class="btn btn-sm btn-outline-primary">
+                Открыть
+            </a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="9">Заявки пока не добавлены.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

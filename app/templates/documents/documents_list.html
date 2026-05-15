@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Документы</h2>
+
+<form method="get" class="card p-4 mb-4">
+    <div class="row">
+        <div class="col-md-8 mb-3">
+            <label>Поиск</label>
+            <input type="text" name="search" value="{{ search }}" class="form-control"
+                   placeholder="Файл, договор, название договора">
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label>Тип документа</label>
+            <select name="document_type" class="form-select">
+                <option value="">Все типы</option>
+                {% for item in ["Договор", "Акт КС-2", "Справка КС-3", "Коммерческое предложение", "Смета", "Прочий документ"] %}
+                    <option value="{{ item }}" {% if document_type == item %}selected{% endif %}>{{ item }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-1 mb-3 d-flex align-items-end">
+            <button class="btn btn-primary w-100">Найти</button>
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Тип</th>
+        <th>Файл</th>
+        <th>Договор</th>
+        <th>Расширение</th>
+        <th>Размер</th>
+        <th>Дата</th>
+        <th></th>
+    </tr>
+
+    {% for doc in documents %}
+    <tr>
+        <td>{{ doc.id }}</td>
+        <td>{{ doc.document_type or "—" }}</td>
+        <td>{{ doc.original_filename or doc.filename }}</td>
+        <td>
+            {% if doc.contract %}
+                <a href="{{ url_for('main.contract_detail', id=doc.contract.id) }}">
+                    {{ doc.contract.number }}
+                </a>
+            {% else %}
+                —
+            {% endif %}
+        </td>
+        <td>{{ doc.file_extension or "—" }}</td>
+        <td>{{ doc.file_size or "—" }} байт</td>
+        <td>{{ doc.uploaded_at.strftime("%d.%m.%Y") if doc.uploaded_at else "—" }}</td>
+        <td>
+            <a href="{{ url_for('main.document_download', id=doc.id) }}"
+               class="btn btn-sm btn-outline-primary">
+                Скачать
+            </a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="8">Документы пока не добавлены.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

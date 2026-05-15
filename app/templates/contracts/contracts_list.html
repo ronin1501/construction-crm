@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Договоры</h2>
+
+<form method="get" class="card p-4 mb-4 filter-card">
+    <div class="row g-3 align-items-end">
+        <div class="col-lg-7 col-md-12">
+            <label>Поиск по номеру договора, клиенту, ИНН или названию</label>
+            <input type="text"
+                   name="search"
+                   value="{{ search }}"
+                   class="form-control"
+                   placeholder="Например: 03-П/2024, Дорожник, Учкекен">
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <label>Статус</label>
+            <select name="status" class="form-select">
+                <option value="">Все статусы</option>
+
+                {% for item in ["Планируется", "Действующий", "На исполнении", "На приемке", "Исполнен", "Просрочен", "Расторгнут"] %}
+                    <option value="{{ item }}" {% if status == item %}selected{% endif %}>
+                        {{ item }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+            <button class="btn btn-primary filter-btn" type="submit">
+                Найти
+            </button>
+        </div>
+    </div>
+</form>
+
+<div class="mb-4">
+    <a href="{{ url_for('main.contract_add') }}" class="btn btn-primary">
+        Добавить договор
+    </a>
+</div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Номер</th>
+        <th>Название</th>
+        <th>Клиент</th>
+        <th>Тип</th>
+        <th>Сроки</th>
+        <th>Сумма</th>
+        <th>Статус</th>
+        <th></th>
+    </tr>
+
+    {% for contract in contracts %}
+    <tr>
+        <td>{{ contract.id }}</td>
+        <td>{{ contract.number }}</td>
+        <td>{{ contract.title }}</td>
+        <td>
+            {% if contract.client %}
+                {{ contract.client.name }}
+            {% else %}
+                —
+            {% endif %}
+        </td>
+        <td>{{ contract.contract_type or "—" }}</td>
+        <td>
+            {{ contract.start_date or "—" }}
+            —
+            {{ contract.end_date or "—" }}
+        </td>
+        <td>
+            {% if contract.amount %}
+                {{ contract.amount }} ₽
+            {% else %}
+                —
+            {% endif %}
+        </td>
+        <td>{{ contract.status }}</td>
+        <td>
+            <a href="{{ url_for('main.contract_detail', id=contract.id) }}"
+            class="btn btn-sm btn-outline-primary">
+                Открыть
+            </a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="9">Договоры не найдены.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

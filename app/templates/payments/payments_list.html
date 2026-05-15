@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Оплаты</h2>
+
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card p-4">
+            <h5>Всего по выборке</h5>
+            <h2>{{ total_amount }} ₽</h2>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card p-4">
+            <h5>Оплачено</h5>
+            <h2>{{ paid_amount }} ₽</h2>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card p-4">
+            <h5>Ожидается</h5>
+            <h2>{{ expected_amount }} ₽</h2>
+        </div>
+    </div>
+</div>
+
+<form method="get" class="card p-4 mb-4">
+    <div class="row">
+        <div class="col-md-8 mb-3">
+            <label>Поиск</label>
+            <input type="text" name="search" value="{{ search }}" class="form-control"
+                   placeholder="Договор, клиент, назначение платежа">
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label>Статус</label>
+            <select name="status" class="form-select">
+                <option value="">Все статусы</option>
+                {% for item in ["Ожидается", "Оплачено", "Просрочено", "Отменено"] %}
+                    <option value="{{ item }}" {% if status == item %}selected{% endif %}>{{ item }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-1 mb-3 d-flex align-items-end">
+            <button class="btn btn-primary w-100">Найти</button>
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Дата</th>
+        <th>Договор</th>
+        <th>Клиент</th>
+        <th>Назначение</th>
+        <th>Тип</th>
+        <th>Сумма</th>
+        <th>Статус</th>
+    </tr>
+
+    {% for payment in payments %}
+    <tr>
+        <td>{{ payment.id }}</td>
+        <td>
+            {{ payment.payment_date or "—" }}
+            {% if payment.payment_date and payment.payment_date < today and payment.status == "Ожидается" %}
+                <br><span class="status-pill danger">просрочено</span>
+            {% endif %}
+        </td>
+        <td>
+            {% if payment.contract %}
+                <a href="{{ url_for('main.contract_detail', id=payment.contract.id) }}">
+                    {{ payment.contract.number }}
+                </a>
+            {% else %}
+                —
+            {% endif %}
+        </td>
+        <td>{{ payment.contract.client.name if payment.contract and payment.contract.client else "—" }}</td>
+        <td>{{ payment.purpose or "—" }}</td>
+        <td>{{ payment.payment_type or "—" }}</td>
+        <td>{{ payment.amount }} ₽</td>
+        <td><span class="status-pill">{{ payment.status }}</span></td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="8">Платежи пока не добавлены.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

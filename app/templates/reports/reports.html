@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">Отчеты</h2>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card p-3 shadow-sm">
+            <h5>Клиенты</h5>
+            <h2>{{ clients_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 shadow-sm">
+            <h5>Договоры</h5>
+            <h2>{{ contracts_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 shadow-sm">
+            <h5>Объекты</h5>
+            <h2>{{ objects_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 shadow-sm">
+            <h5>Общая сумма договоров</h5>
+            <h2>{{ total_amount }} ₽</h2>
+        </div>
+    </div>
+</div>
+
+<div class="card p-4 shadow-sm">
+    <h4>Назначение отчета</h4>
+
+    <p>
+        Данный раздел предназначен для получения сводной информации о работе строительной компании:
+        количестве клиентов, заключенных договоров, строительных объектов и общей сумме договоров.
+    </p>
+
+    <p>
+        Отчет позволяет руководителю быстро оценить текущее состояние клиентской базы,
+        объем договорной работы и общую стоимость выполняемых или запланированных работ.
+    </p>
+</div>
+{% endblock %}

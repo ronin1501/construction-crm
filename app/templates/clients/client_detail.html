@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">{{ client.name }}</h2>
+
+<div class="card p-4">
+    <p><b>Тип клиента:</b> {{ client.client_type }}</p>
+    <p><b>ИНН:</b> {{ client.inn }}</p>
+    <p><b>Телефон:</b> {{ client.phone }}</p>
+    <p><b>Email:</b> {{ client.email }}</p>
+    <p><b>Адрес:</b> {{ client.address }}</p>
+    <p><b>Представитель:</b> {{ client.representative }}</p>
+</div>
+
+<a href="{{ url_for('main.client_edit', id=client.id) }}" class="btn btn-warning mt-3">Редактировать</a>
+{% endblock %}
