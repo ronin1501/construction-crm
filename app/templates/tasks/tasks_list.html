@@ -5,13 +5,13 @@
 
 <form method="get" class="card p-4 mb-4 filter-card">
     <div class="row g-3 align-items-end">
-        <div class="col-lg-5 col-md-12">
+        <div class="col-lg-4 col-md-12">
             <label>Поиск</label>
             <input type="text"
-                   name="search"
-                   value="{{ search }}"
-                   class="form-control"
-                   placeholder="Задача, клиент, договор, ответственный">
+                name="search"
+                value="{{ search }}"
+                class="form-control"
+                placeholder="Задача, клиент, договор, ответственный">
         </div>
 
         <div class="col-lg-3 col-md-6">
@@ -40,7 +40,7 @@
             </select>
         </div>
 
-        <div class="col-lg-1 col-md-12">
+        <div class="col-lg-2 col-md-12">
             <button class="btn btn-primary filter-btn" type="submit">
                 Найти
             </button>
@@ -48,7 +48,11 @@
     </div>
 </form>
 
-<a href="{{ url_for('main.task_add') }}" class="btn btn-primary mb-3">Добавить задачу</a>
+<div class="mb-4">
+    <a href="{{ url_for('main.task_add') }}" class="btn btn-primary">
+        Добавить задачу
+    </a>
+</div>
 
 <table class="table table-bordered">
     <tr>
@@ -65,29 +69,66 @@
     {% for task in tasks %}
     <tr>
         <td>{{ task.id }}</td>
+
         <td>
             <b>{{ task.title }}</b><br>
             <span>{{ task.task_type }}</span>
         </td>
+
         <td>
             {{ task.due_date or "—" }}
+
             {% if task.due_date and task.due_date < today and task.status not in ["Выполнена", "Отменена"] %}
-                <br><span class="status-pill danger">Просрочено</span>
+                <br>
+                <span class="status-pill danger">
+                    Просрочено
+                </span>
             {% endif %}
         </td>
+
         <td>
             {{ task.client.name if task.client else "—" }}
+
             {% if task.contract %}
-                <br><a href="{{ url_for('main.contract_detail', id=task.contract.id) }}">{{ task.contract.number }}</a>
+                <br>
+                <a href="{{ url_for('main.contract_detail', id=task.contract.id) }}">
+                    {{ task.contract.number }}
+                </a>
+            {% endif %}
+
+            {% if task.lead %}
+                <br>
+                <a href="{{ url_for('main.lead_detail', id=task.lead.id) }}">
+                    Заявка №{{ task.lead.id }}
+                </a>
             {% endif %}
         </td>
+
         <td>{{ task.responsible or "—" }}</td>
-        <td><span class="status-pill">{{ task.priority }}</span></td>
-        <td><span class="status-pill">{{ task.status }}</span></td>
+
         <td>
-            <a href="{{ url_for('main.task_edit', id=task.id) }}" class="btn btn-sm btn-outline-primary">Изменить</a>
+            <span class="status-pill">
+                {{ task.priority }}
+            </span>
+        </td>
+
+        <td>
+            <span class="status-pill">
+                {{ task.status }}
+            </span>
+        </td>
+
+        <td>
+            <a href="{{ url_for('main.task_edit', id=task.id) }}"
+            class="btn btn-sm btn-outline-primary">
+                Изменить
+            </a>
+
             {% if task.status != "Выполнена" %}
-                <a href="{{ url_for('main.task_complete', id=task.id) }}" class="btn btn-sm btn-success">Готово</a>
+                <a href="{{ url_for('main.task_complete', id=task.id) }}"
+                class="btn btn-sm btn-success">
+                    Готово
+                </a>
             {% endif %}
         </td>
     </tr>
