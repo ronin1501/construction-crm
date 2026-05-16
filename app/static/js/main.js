@@ -3,6 +3,27 @@ console.log('Construction CRM loaded');
 document.addEventListener('DOMContentLoaded', function () {
     const selects = document.querySelectorAll('select.form-select');
 
+    function clearOpenCard(wrapper) {
+        const card = wrapper.closest('.card');
+
+        if (card) {
+            card.classList.remove('custom-select-card-open');
+        }
+    }
+
+    function setOpenCard(wrapper) {
+        const card = wrapper.closest('.card');
+
+        if (card) {
+            card.classList.add('custom-select-card-open');
+        }
+    }
+
+    function closeSelect(wrapper) {
+        wrapper.classList.remove('open');
+        clearOpenCard(wrapper);
+    }
+
     selects.forEach(function (select) {
         if (select.dataset.customSelectReady === 'true') {
             return;
@@ -46,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
 
                 customOption.classList.add('selected');
-                wrapper.classList.remove('open');
+                closeSelect(wrapper);
 
                 select.dispatchEvent(new Event('change', { bubbles: true }));
             });
@@ -61,11 +82,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 .querySelectorAll('.custom-select-wrapper.open')
                 .forEach(function (item) {
                     if (item !== wrapper) {
-                        item.classList.remove('open');
+                        closeSelect(item);
                     }
                 });
 
             wrapper.classList.toggle('open');
+
+            if (wrapper.classList.contains('open')) {
+                setOpenCard(wrapper);
+            } else {
+                clearOpenCard(wrapper);
+            }
         });
 
         wrapper.appendChild(trigger);
@@ -78,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document
             .querySelectorAll('.custom-select-wrapper.open')
             .forEach(function (item) {
-                item.classList.remove('open');
+                closeSelect(item);
             });
     });
 });
