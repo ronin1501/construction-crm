@@ -82,3 +82,18 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 });
+
+// Автоматически добавляем адаптивную обертку ко всем таблицам
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("table.table").forEach(function (table) {
+        if (table.parentElement.classList.contains("table-responsive-auto")) {
+            return;
+        }
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "table-responsive-auto";
+
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+    });
+});

@@ -1441,3 +1441,41 @@ main.container,
         width: 100%;
     }
 }
+
+/* ===== Адаптация таблиц для мобильных экранов ===== */
+
+.table-responsive-auto {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 18px;
+}
+
+.table-responsive-auto .table {
+    margin-bottom: 0;
+}
+
+/* На маленьких экранах таблицы не ломают верстку, а прокручиваются */
+@media (max-width: 768px) {
+    table.table {
+        min-width: 850px;
+        font-size: 14px;
+    }
+
+    .table th,
+    .table td {
+        padding: 12px 14px;
+        white-space: nowrap;
+    }
+
+    .table td:nth-child(3),
+    .table td:nth-child(4) {
+        white-space: normal;
+        min-width: 180px;
+    }
+
+    .page-title {
+        font-size: 28px;
+        line-height: 1.15;
+    }
+}

@@ -320,37 +320,39 @@ with app.app_context():
     for contract in [contract_1, contract_2, contract_3, contract_4, contract_5]:
         add_log("Создание договора", f"Добавлен договор №{contract.number}.", user=admin, client=contract.client, contract=contract)
 
-    print("Добавление заявок / обращений...")
+        print("Добавление заявок / обращений...")
 
     lead_1 = Lead(
-        request_date=today - timedelta(days=6),
+        title="Расчет стоимости ремонта и благоустройства территории",
+        lead_date=today - timedelta(days=6),
         source="Телефон",
         status="Расчет сметы",
+        priority="Высокая",
         contact_person="Алботова Фатима Умаровна",
         phone="+7 928 398-37-57",
         email="a-gfatima@mail.ru",
         work_type="Ремонт и благоустройство территории",
         object_address="КЧР, Малокарачаевский район, село Первомайское",
         estimated_budget=Decimal("900000.00"),
-        responsible_person="Менеджер по работе с клиентами",
-        planned_contact_date=today + timedelta(days=1),
+        responsible="Менеджер по работе с клиентами",
         comment="Клиент запросил предварительный расчет стоимости работ.",
         client_id=client_4.id,
         object_id=object_3.id
     )
 
     lead_2 = Lead(
-        request_date=today - timedelta(days=3),
-        source="Муниципальный запрос",
+        title="Запрос коммерческого предложения на восстановление асфальтобетонного покрытия",
+        lead_date=today - timedelta(days=3),
+        source="Муниципальный заказ",
         status="Коммерческое предложение",
+        priority="Обычная",
         contact_person="Представитель администрации Римгорского сельского поселения",
         phone="+7 (87877) 2-39-59",
         email="rimgorka@bk.ru",
         work_type="Восстановление асфальтобетонного покрытия",
         object_address="Районы Карачаево-Черкесской Республики",
         estimated_budget=Decimal("5400000.00"),
-        responsible_person="Главный инженер",
-        planned_contact_date=today + timedelta(days=2),
+        responsible="Главный инженер",
         comment="Подготовлено коммерческое предложение КП-24/04.",
         client_id=client_1.id,
         object_id=object_5.id,
@@ -358,17 +360,18 @@ with app.app_context():
     )
 
     lead_3 = Lead(
-        request_date=today,
+        title="Запрос на подготовку проектно-сметной документации",
+        lead_date=today,
         source="Email",
         status="Новая",
+        priority="Высокая",
         contact_person="Семенов В.В.",
         phone="",
         email="info@arkhyz-original.ru",
         work_type="Проектно-сметная документация",
         object_address="г. Черкесск",
         estimated_budget=Decimal("1250000.00"),
-        responsible_person="Инженер ПТО",
-        planned_contact_date=today,
+        responsible="Инженер ПТО",
         comment="Необходимо уточнить исходные данные по объекту.",
         client_id=client_5.id,
         object_id=object_6.id,
@@ -379,7 +382,14 @@ with app.app_context():
     db.session.commit()
 
     for lead in [lead_1, lead_2, lead_3]:
-        add_log("Создание заявки", f"Создана заявка #{lead.id}: {lead.contact_person}.", user=admin, client=lead.client, contract=lead.contract, lead=lead)
+        add_log(
+            "Создание заявки",
+            f"Создана заявка #{lead.id}: {lead.title}.",
+            user=admin,
+            client=lead.client,
+            contract=lead.contract,
+            lead=lead
+        )
 
     print("Добавление этапов работ...")
 
@@ -516,16 +526,16 @@ with app.app_context():
     for act in [act_1, act_2, act_3]:
         add_log("Создание акта", f"Добавлен {act.act_type} №{act.act_number}.", user=admin, contract=act.contract)
 
-    print("Добавление задач и напоминаний...")
+        print("Добавление задач и напоминаний...")
 
     task_1 = Task(
         title="Связаться с клиентом по заявке на расчет сметы",
         description="Уточнить объем работ и направить предварительный расчет стоимости.",
-        task_type="Звонок",
-        priority="Высокий",
+        task_type="Звонок клиенту",
+        priority="Высокая",
         status="В работе",
         due_date=today,
-        responsible_person="Менеджер по работе с клиентами",
+        responsible="Менеджер по работе с клиентами",
         client_id=client_4.id,
         lead_id=lead_1.id
     )
@@ -534,10 +544,10 @@ with app.app_context():
         title="Проверить поступление окончательного платежа",
         description="Платеж по договору №02/10 ожидается, срок уже прошел.",
         task_type="Оплата",
-        priority="Срочный",
+        priority="Срочная",
         status="В работе",
         due_date=today - timedelta(days=2),
-        responsible_person="Бухгалтер",
+        responsible="Бухгалтер",
         client_id=client_5.id,
         contract_id=contract_1.id
     )
@@ -546,10 +556,10 @@ with app.app_context():
         title="Передать акт ПР-02/10 на подпись заказчику",
         description="Подготовить комплект документов для сдачи-приемки проектных работ.",
         task_type="Документы",
-        priority="Высокий",
+        priority="Высокая",
         status="Новая",
         due_date=today + timedelta(days=3),
-        responsible_person="Инженер ПТО",
+        responsible="Инженер ПТО",
         client_id=client_5.id,
         contract_id=contract_1.id
     )
@@ -558,10 +568,10 @@ with app.app_context():
         title="Подготовить договор по КП-24/04",
         description="После согласования коммерческого предложения оформить проект договора.",
         task_type="Документы",
-        priority="Средний",
+        priority="Обычная",
         status="Новая",
         due_date=today + timedelta(days=8),
-        responsible_person="Юрист",
+        responsible="Юрист",
         client_id=client_1.id,
         contract_id=contract_5.id,
         lead_id=lead_2.id
@@ -571,7 +581,15 @@ with app.app_context():
     db.session.commit()
 
     for task in [task_1, task_2, task_3, task_4]:
-        add_log("Создание задачи", f"Создана задача #{task.id}: {task.title}.", user=admin, client=task.client, contract=task.contract, lead=task.lead, task=task)
+        add_log(
+            "Создание задачи",
+            f"Создана задача #{task.id}: {task.title}.",
+            user=admin,
+            client=task.client,
+            contract=task.contract,
+            lead=task.lead,
+            task=task
+        )
 
     print("Добавление документов...")
 
