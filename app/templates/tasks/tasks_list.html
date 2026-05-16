@@ -70,7 +70,7 @@
                 <br><a href="{{ url_for('main.contract_detail', id=task.contract.id) }}">{{ task.contract.number }}</a>
             {% endif %}
         </td>
-        <td>{{ task.responsible_person or "—" }}</td>
+        <td>{{ task.responsible or "—" }}</td>
         <td><span class="status-pill">{{ task.priority }}</span></td>
         <td><span class="status-pill">{{ task.status }}</span></td>
         <td>
