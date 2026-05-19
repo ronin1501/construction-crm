@@ -10,12 +10,14 @@
             <h2>{{ total_amount }} ₽</h2>
         </div>
     </div>
+
     <div class="col-md-4 mb-3">
         <div class="card p-4">
             <h5>Оплачено</h5>
             <h2>{{ paid_amount }} ₽</h2>
         </div>
     </div>
+
     <div class="col-md-4 mb-3">
         <div class="card p-4">
             <h5>Ожидается</h5>
@@ -24,26 +26,34 @@
     </div>
 </div>
 
-<form method="get" class="card p-4 mb-4">
-    <div class="row">
-        <div class="col-md-8 mb-3">
+<form method="get" class="card p-4 mb-4 filter-card">
+    <div class="row g-3 align-items-end">
+        <div class="col-lg-7 col-md-12">
             <label>Поиск</label>
-            <input type="text" name="search" value="{{ search }}" class="form-control"
-                   placeholder="Договор, клиент, назначение платежа">
+            <input type="text"
+                name="search"
+                value="{{ search }}"
+                class="form-control"
+                placeholder="Договор, клиент, назначение платежа">
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-lg-3 col-md-6">
             <label>Статус</label>
             <select name="status" class="form-select">
                 <option value="">Все статусы</option>
+
                 {% for item in ["Ожидается", "Оплачено", "Просрочено", "Отменено"] %}
-                    <option value="{{ item }}" {% if status == item %}selected{% endif %}>{{ item }}</option>
+                    <option value="{{ item }}" {% if status == item %}selected{% endif %}>
+                        {{ item }}
+                    </option>
                 {% endfor %}
             </select>
         </div>
 
-        <div class="col-md-1 mb-3 d-flex align-items-end">
-            <button class="btn btn-primary w-100">Найти</button>
+        <div class="col-lg-2 col-md-6">
+            <button class="btn btn-primary filter-btn" type="submit">
+                Найти
+            </button>
         </div>
     </div>
 </form>
@@ -63,12 +73,18 @@
     {% for payment in payments %}
     <tr>
         <td>{{ payment.id }}</td>
+
         <td>
             {{ payment.payment_date or "—" }}
+
             {% if payment.payment_date and payment.payment_date < today and payment.status == "Ожидается" %}
-                <br><span class="status-pill danger">просрочено</span>
+                <br>
+                <span class="status-pill danger">
+                    Просрочено
+                </span>
             {% endif %}
         </td>
+
         <td>
             {% if payment.contract %}
                 <a href="{{ url_for('main.contract_detail', id=payment.contract.id) }}">
@@ -78,11 +94,28 @@
                 —
             {% endif %}
         </td>
-        <td>{{ payment.contract.client.name if payment.contract and payment.contract.client else "—" }}</td>
+
+        <td>
+            {{ payment.contract.client.name if payment.contract and payment.contract.client else "—" }}
+        </td>
+
         <td>{{ payment.purpose or "—" }}</td>
+
         <td>{{ payment.payment_type or "—" }}</td>
-        <td>{{ payment.amount }} ₽</td>
-        <td><span class="status-pill">{{ payment.status }}</span></td>
+
+        <td>
+            {% if payment.amount %}
+                {{ payment.amount }} ₽
+            {% else %}
+                —
+            {% endif %}
+        </td>
+
+        <td>
+            <span class="status-pill">
+                {{ payment.status }}
+            </span>
+        </td>
     </tr>
     {% else %}
     <tr>
